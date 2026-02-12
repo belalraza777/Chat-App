@@ -1,14 +1,21 @@
 import jwt from "jsonwebtoken";
 
 export function verifyAuth(req, res, next) {
-    const token = req.cookies?.token;  // safely access token
+    // Get token from cookie or header
+    let token = req.cookies.token;
+
+    // If no token in cookie, check Authorization header
+    if (!token) {
+        const authHeader = req.headers.authorization;
+        if (authHeader && authHeader.startsWith('Bearer ')) {
+            token = authHeader.substring(7); // Remove 'Bearer ' prefix
+        }
+    }
 
     if (!token) {
-        return res.status(401).json({
-            success: false,
-            error: "Authentication token missing. Please log in."
-        });
+        return res.status(401).json({ error: 'No token provided' });
     }
+
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
         if (err) {
