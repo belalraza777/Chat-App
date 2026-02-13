@@ -10,7 +10,7 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
-        folder: "airbnb_project_img",
+        folder: "chat_app_avatars",
         allowedFormats: ["png", "jpeg", "jpg"],
     },
 });

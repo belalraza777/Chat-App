@@ -35,7 +35,15 @@ const chatRouter = require('./routers/chat');
 app.use('/api/auth', authRouter);
 app.use('/api/chat', chatRouter);
 
-
+// Global Error Handler
+app.use((err, req, res, next) => {
+  console.error("Error:", err.message);
+  const statusCode = err.statusCode || 500;
+  res.status(statusCode).json({
+    success: false,
+    message: err.message || "Internal server error",
+  });
+});
 
 // Start server
 const PORT = process.env.PORT || 3000;
