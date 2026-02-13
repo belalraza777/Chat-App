@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import './rightPart.css';
-import useSendMessage from '../../../context/sendMessage';
+import useConversation from '../../../store/zustand';
 
 export default function Input() {
-  const { loading, sendMessages } = useSendMessage();
+  const { sendingMessage, sendMessage } = useConversation();
 
   const [message, setMessage] = useState('');
 
@@ -15,7 +15,7 @@ export default function Input() {
       return; // Don't submit empty messages
     }
     try {
-      sendMessages(message); // Send the message
+      sendMessage(message); // Send the message
       setMessage('');
     } catch (error) {
       console.error("Error sending message:", error);

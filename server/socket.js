@@ -15,11 +15,11 @@ function initSocket(server) {
 
     // Handle socket connections
     io.on('connection', (socket) => {
-        console.log('🔌 User connected:', socket.id);
+        console.log('User connected:', socket.id);
         const userId = socket.handshake.query.userId; // userId from frontend
         if (userId) {
             users[userId] = socket.id; // add to object
-            console.log(`✅ User ${userId} mapped to socket ${socket.id}`);
+            console.log(`User ${userId} mapped to socket ${socket.id}`);
         }
 
         // emit online users to all clients
@@ -31,7 +31,6 @@ function initSocket(server) {
             if (userId && users[userId]) {
                 delete users[userId]; // remove from object
                 io.emit('getOnlineUsers', Object.keys(users)); // emit updated online users
-
                 console.log(` User ${userId} disconnected (socket: ${socket.id})`);
             }
         });

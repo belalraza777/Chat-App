@@ -1,18 +1,22 @@
+import { useEffect } from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
 import Message from "./message";
-import useGetMessage from "../../../context/getMessages";
+import useConversation from "../../../store/zustand";
 import Loader from "../../common/Loader";
 import "./rightPart.css";
-import useGetSocketMessage from "../../../context/getSocketMesaage";
 
 export default function Messages() {
-  useGetSocketMessage(); // Custom hook to handle incoming socket messages
-  const { loading, messages } = useGetMessage();
-  
+  const { getMessages, loadingMessages, fetchMessages, selectedConversation } = useConversation();
+  const messages = getMessages();
+
+  useEffect(() => {
+    fetchMessages();
+  }, [selectedConversation, fetchMessages]);
+
   console.log("Messages:", messages);
   return (
     <ScrollToBottom className="messages">
-      {loading ? (
+      {loadingMessages ? (
         <Loader />
       ) : messages.length > 0 ? (
         messages.map((msg) => (

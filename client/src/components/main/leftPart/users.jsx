@@ -1,17 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import User from './user';
-import useGetAllUsers from '../../../context/getAllUsers';
+import useConversation from '../../../store/zustand';
 import Loader from '../../common/Loader';
 import './leftPart.css';
 import { useSocketContext } from '../../../context/socketContext';
 
 export default function Users() {
-  const { allUsers, loading } = useGetAllUsers();
+  const { allUsers, loadingUsers, fetchAllUsers } = useConversation();
   const { onlineUsers } = useSocketContext();
+
+  useEffect(() => {
+    fetchAllUsers();
+  }, [fetchAllUsers]);
 
   return (
     <div className="left__users">
-      {loading ? (
+      {loadingUsers ? (
         <Loader type="user-list" count={5} />
       ) : (
         allUsers.map((user) => (

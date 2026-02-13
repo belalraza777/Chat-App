@@ -66,7 +66,7 @@ exports.getMessages = async (req, res) => {
 
     res.status(200).json(conversation.messages);
   } catch (error) {
-    console.log("❌ Error in getMessages:", error);
+    console.log("Error in getMessages:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -86,7 +86,7 @@ exports.getUsers = async (req, res) => {
 
     res.status(200).json(filteredUsers);
   } catch (error) {
-    console.log("❌ Error in getUsers:", error);
+    console.log(" Error in getUsers:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };

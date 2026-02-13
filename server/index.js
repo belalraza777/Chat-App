@@ -26,7 +26,7 @@ app.use(cors({
 
 // Mongoose setup
 mongoose.connect("mongodb://127.0.0.1:27017/ChatApp")
-  .then(() => console.log("✅ MongoDB Connected"))
+  .then(() => console.log("MongoDB Connected"))
   .catch(err => console.error(err));
 
 // Routes
@@ -40,5 +40,5 @@ app.use('/api/chat', chatRouter);
 // Start server
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`🚀 Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
