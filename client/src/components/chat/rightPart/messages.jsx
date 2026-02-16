@@ -1,21 +1,27 @@
-import { useEffect } from "react";
-import ScrollToBottom from "react-scroll-to-bottom";
+import { useEffect, useRef } from "react";
 import Message from "./message";
 import useConversation from "../../../store/zustand";
 import Loader from "../../common/Loader";
 import "./rightPart.css";
 
 export default function Messages() {
-  const { getMessages, loadingMessages, fetchMessages, selectedConversation } = useConversation();
+  const { getMessages, loadingMessages, fetchMessages, selectedConversation } =
+    useConversation();
+
   const messages = getMessages();
+  const bottomRef = useRef(null);
 
   useEffect(() => {
     fetchMessages();
   }, [selectedConversation, fetchMessages]);
 
-  console.log("Messages:", messages);
+  // Auto scroll whenever messages change
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
   return (
-    <ScrollToBottom className="messages">
+    <div className="messages">
       {loadingMessages ? (
         <Loader />
       ) : messages.length > 0 ? (
@@ -25,6 +31,9 @@ export default function Messages() {
       ) : (
         <p className="no-messages">No messages yet</p>
       )}
-    </ScrollToBottom>
+
+      {/* invisible anchor */}
+      <div ref={bottomRef} />
+    </div>
   );
 }
