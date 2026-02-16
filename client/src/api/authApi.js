@@ -35,3 +35,13 @@ export function logoutUser() {
 export const getCurrentUser = async () => {
   return axiosInstance.get("/check"); // returns { authenticated: true, data: user }
 };
+
+// Update profile (username + avatar)
+export function updateProfile(formData) {
+  return axios.put("http://localhost:3000/api/auth/profile", formData, {
+    withCredentials: true,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+}

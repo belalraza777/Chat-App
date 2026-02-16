@@ -17,8 +17,8 @@ const schema = mongoose.Schema({
         required: true
     },
     profileImage: {
-        url: String,
-        filename: String,
+        public_id: String,
+        url: String
     }
 
 

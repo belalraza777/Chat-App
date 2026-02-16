@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors({
   origin: "http://localhost:5173",
-  methods: ["GET", "POST"],
+  methods: ["GET", "POST", "PUT"],
   credentials: true
 }));
 

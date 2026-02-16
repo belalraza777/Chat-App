@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../model/userModel");
+const { cloudinary } = require("../util/cloudConfig");
 
 const COOKIE_OPTIONS = {
   httpOnly: true,
@@ -16,7 +17,7 @@ function generateToken(user) {
       _id: user._id,
       email: user.email,
       username: user.username,
-      profileImage: user.profileImage?.url,
+      profileImage: user.profileImage,
     },
     process.env.JWT_SECRET,
     { expiresIn: "1d" }
@@ -41,7 +42,7 @@ exports.signup = async (req, res) => {
     password: hash,
     profileImage: {
       url: req.file?.path,
-      filename: req.file?.filename,
+      public_id: req.file?.filename, // Store public_id for consistency
     },
   });
 
@@ -57,7 +58,7 @@ exports.signup = async (req, res) => {
       _id: user._id,
       username: user.username,
       email: user.email,
-      profileImage: user.profileImage?.url,
+      profileImage: user.profileImage,
     },
   });
 };
@@ -82,7 +83,7 @@ exports.login = async (req, res) => {
       _id: user._id,
       username: user.username,
       email: user.email,
-      profileImage: user.profileImage?.url,
+      profileImage: user.profileImage,
     },
   });
 };
@@ -97,4 +98,56 @@ exports.logout = (req, res) => {
 exports.checkAuth = (req, res) => {
   // req.user is already set by verifyAuth middleware
   res.status(200).json({ authenticated: true, data: req.user });
+};
+
+// Update Profile Controller
+// This allows users to update their username and/or profile image
+exports.updateProfile = async (req, res) => {
+  const userId = req.user._id;
+  const { username } = req.body;
+
+  const user = await User.findById(userId);
+  if (!user) return res.status(404).json({ success: false, message: "User not found" });
+
+  // Update username if provided
+  if (username && username !== user.username) {
+    const existing = await User.findOne({ username });
+    if (existing) {
+      return res.status(400).json({ success: false, message: "Username already taken" });
+    }
+    user.username = username;
+  }
+
+  // Update profile image if a new file was uploaded
+  if (req.file) {
+    // Delete old image from Cloudinary if exists
+    if (user.profileImage && user.profileImage.public_id) {
+      try {
+        await cloudinary.uploader.destroy(user.profileImage.public_id);
+      } catch (err) {
+        console.error("Cloudinary deletion error:", err);
+      }
+    }
+    user.profileImage = {
+      url: req.file.path,
+      public_id: req.file.filename, // CloudinaryStorage sets filename as public_id
+    };
+  }
+
+  await user.save();
+
+  // Re-issue token with updated info
+  const token = generateToken(user);
+  res.cookie("token", token, COOKIE_OPTIONS);
+
+  res.json({
+    success: true,
+    message: "Profile updated successfully",
+    user: {
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      profileImage: user.profileImage,
+    },
+  });
 };

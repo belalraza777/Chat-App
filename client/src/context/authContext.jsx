@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { loginUser, signupUser, logoutUser, getCurrentUser } from "../api/authApi";
+import { loginUser, signupUser, logoutUser, getCurrentUser, updateProfile } from "../api/authApi";
 import { toast } from "react-toastify";
 
 const AuthContext = createContext();
@@ -69,11 +69,24 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // ------------------ UPDATE PROFILE ------------------
+  const handleUpdateProfile = async (formData) => {
+    try {
+      const res = await updateProfile(formData);
+      setUser(res.data.user);
+      toast.success("Profile updated successfully!");
+      return { success: true };
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Profile update failed.");
+      return { success: false, message: err.response?.data?.message || "Update failed" };
+    }
+  };
+
   console.log("LOGIN user: ",user);
   
 
   return (
-    <AuthContext.Provider value={{ user, loading, error, handleLogin, handleSignup, handleLogout }}>
+    <AuthContext.Provider value={{ user, loading, error, handleLogin, handleSignup, handleLogout, handleUpdateProfile }}>
       {!loading && children} {/* render app only after checking user */}
     </AuthContext.Provider>
   );

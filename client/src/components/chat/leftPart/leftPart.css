@@ -1,0 +1,323 @@
+/* leftPart.css */
+.left {
+  width: 100%;
+  background: #111827;
+  /* gray-900 */
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.left__header {
+  height: 64px;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 4px;                     /* slightly increased for breathing room */
+  padding: 0 16px;                 /* spacing inside */
+  border: 2px solid #1750ac;       /* thinner border for elegance */
+  border-radius: 16px;             /* smoother curve */
+  
+  box-shadow: 0 4px 12px rgba(23, 80, 172, 0.25); /* softer shadow */
+  color: #1750ac;                  /* readable text color */
+  font-weight: 600;                /* stronger text */
+  font-family: "Segoe UI", Arial, sans-serif; /* modern font */
+}
+
+
+.left__header .logo {
+  height: 100%;                     /* smaller than full height */
+  object-fit: contain;
+  margin-right: 8px;               /* space between logo and text */
+}
+
+.left__body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 20px 24px;
+}
+
+.left__users {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.left__user {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.left__user:hover {
+  background: rgba(55, 65, 81, 0.6);
+}
+
+.left__user--selected {
+  background: rgba(55, 65, 81, 0.8);
+  box-shadow: inset 0 0 0 1px rgba(99, 102, 241, 0.15);
+}
+
+.left__avatar {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  background: #3b82f6;
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.left__avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Small green dot near avatar */
+.online-indicator {
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  width: 11px;
+  height: 11px;
+  background-color: #22c55e;
+  border-radius: 50%;
+  border: 2px solid #111827;
+  box-shadow: 0 0 5px rgba(34, 197, 94, 0.3);
+}
+
+
+.left__userinfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.left__username {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.left__usermeta {
+  font-size: 12px;
+  color: #9ca3af;
+  /* gray-400 */
+}
+
+.left__footer {
+  padding: 12px 16px;
+  background: linear-gradient(180deg, rgba(17, 24, 39, 0.95), #0f172a);
+  border-top: 1px solid rgba(55, 65, 81, 0.6);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.left__footer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(99, 102, 241, 0.06), transparent);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.left__footer:hover::before {
+  opacity: 1;
+}
+
+.left__footer:hover {
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.97), #111827);
+}
+
+.left__footer-avatar {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.left__footer-avatar-img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(99, 102, 241, 0.3);
+  transition: all 0.25s ease;
+  box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+}
+
+.left__footer:hover .left__footer-avatar-img {
+  border-color: rgba(99, 102, 241, 0.6);
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.15);
+}
+
+.left__footer-avatar-fallback {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(99, 102, 241, 0.3);
+  transition: all 0.25s ease;
+  box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+}
+
+.left__footer:hover .left__footer-avatar-fallback {
+  border-color: rgba(99, 102, 241, 0.55);
+  box-shadow: 0 0 14px rgba(99, 102, 241, 0.2);
+}
+
+.left__footer-status {
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #22c55e;
+  border: 2.5px solid #0f172a;
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.35);
+}
+
+.left__footer-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.left__footer-username {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #f1f5f9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.15px;
+  line-height: 1.3;
+}
+
+.left__footer-label {
+  font-size: 11.5px;
+  color: rgba(148, 163, 184, 0.85);
+  font-weight: 400;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 1;
+}
+
+.left__footer-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22c55e;
+  display: inline-block;
+  box-shadow: 0 0 5px rgba(34, 197, 94, 0.4);
+  animation: footerPulse 2s ease-in-out infinite;
+}
+
+@keyframes footerPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.left__footer-chevron {
+  color: rgba(148, 163, 184, 0.4);
+  font-size: 11px;
+  flex-shrink: 0;
+  transition: all 0.25s ease;
+  margin-left: auto;
+}
+
+.left__footer:hover .left__footer-chevron {
+  color: rgba(148, 163, 184, 0.7);
+  transform: translateX(2px);
+}
+
+/* Unread message badge */
+.left__unread-badge {
+  margin-left: auto;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 9999px;
+  background-color: #3b82f6;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* Responsive: full width on small screens */
+@media (max-width: 768px) {
+  .left__header {
+    height: 56px;
+    margin: 4px;
+    padding: 0 12px;
+  }
+
+  .left__body {
+    padding: 12px 12px;
+  }
+
+  .left__avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .left__username {
+    font-size: 13px;
+  }
+
+  .left__usermeta {
+    font-size: 11px;
+  }
+
+  .left__footer {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .left__footer-avatar-img,
+  .left__footer-avatar-fallback {
+    width: 36px;
+    height: 36px;
+    font-size: 15px;
+  }
+
+  .left__footer-username {
+    font-size: 14px;
+  }
+
+  .left__footer-label {
+    font-size: 11px;
+  }
+}

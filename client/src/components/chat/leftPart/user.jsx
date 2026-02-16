@@ -3,13 +3,14 @@ import useConversation from '../../../store/zustand';
 import './leftPart.css';
 
 export default function User({ user, isOnline }) {
-    const { setSelectedConversation, selectedConversation } = useConversation();
+    const { setSelectedConversation, selectedConversation, allUnReadMessages } = useConversation();
 
     function handleUserClick() {
         setSelectedConversation(user);
     }
 
     const isSelected = selectedConversation?._id === user._id;
+    const unreadCount = allUnReadMessages[user._id] || 0;
     
     return (
 
@@ -28,6 +29,13 @@ export default function User({ user, isOnline }) {
                 <p className="left__username">{user.username}</p>
                 <p className="left__usermeta">{user.email}</p>
             </div>
+
+            {/* Unread badge */}
+            {unreadCount > 0 && (
+                <span className="left__unread-badge">
+                    {unreadCount > 99 ? '99+' : unreadCount}
+                </span>
+            )}
         </div>
     );
 }
