@@ -7,10 +7,11 @@ const {
   getMessages,
   getUsers,
 } = require("../controllers/chatController");
+const upload = require("../util/upload");
 
 
 // Send a message to a specific user
-router.post("/send/:id", verifyAuth, asyncWrap(sendMessage));
+router.post("/send/:id", verifyAuth, upload.single("file"), asyncWrap(sendMessage));
 
 // Get conversation messages with a specific user
 router.get("/get/:id", verifyAuth, asyncWrap(getMessages));

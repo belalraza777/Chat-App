@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../model/userModel");
-const { cloudinary } = require("../util/cloudConfig");
+const imagekit = require("../config/imageKit");
 
 const COOKIE_OPTIONS = {
   httpOnly: true,
@@ -36,14 +36,26 @@ exports.signup = async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(password, salt);
 
+
+  let profileImage = undefined;
+  if (req.file) {
+    // Upload profile image to ImageKit
+    const uploadResponse = await imagekit.upload({
+      file: req.file.buffer,
+      fileName: Date.now() + "-" + req.file.originalname,
+      folder: "chat_uploads",
+    });
+    profileImage = {
+      url: uploadResponse.url,
+      public_id: uploadResponse.fileId,
+    };
+  }
+
   const user = new User({
     email,
     username,
     password: hash,
-    profileImage: {
-      url: req.file?.path,
-      public_id: req.file?.filename, // Store public_id for consistency
-    },
+    profileImage,
   });
 
   await user.save();
@@ -120,17 +132,22 @@ exports.updateProfile = async (req, res) => {
 
   // Update profile image if a new file was uploaded
   if (req.file) {
-    // Delete old image from Cloudinary if exists
+    // Delete old image from ImageKit if exists
     if (user.profileImage && user.profileImage.public_id) {
       try {
-        await cloudinary.uploader.destroy(user.profileImage.public_id);
+        await imagekit.deleteFile(user.profileImage.public_id);
       } catch (err) {
-        console.error("Cloudinary deletion error:", err);
+        console.error("ImageKit deletion error:", err);
       }
     }
+    const uploadResponse = await imagekit.upload({
+      file: req.file.buffer,
+      fileName: Date.now() + "-" + req.file.originalname,
+      folder: "chat_uploads",
+    });
     user.profileImage = {
-      url: req.file.path,
-      public_id: req.file.filename, // CloudinaryStorage sets filename as public_id
+      url: uploadResponse.url,
+      public_id: uploadResponse.fileId,
     };
   }
 

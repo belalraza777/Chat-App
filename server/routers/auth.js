@@ -1,11 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const multer = require("multer");
-const { storage } = require("../util/cloudConfig");
-const upload = multer({ storage });
 const { validate, signupSchema, loginSchema, updateProfileSchema } = require("../util/joiValidation");
 const { verifyAuth } = require("../util/verifyAuth");
 const asyncWrap = require("../util/asyncWrap");
+const upload = require("../util/upload");
 
 const { signup, login, logout, checkAuth, updateProfile } = require("../controllers/authController");
 

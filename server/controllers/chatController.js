@@ -1,6 +1,7 @@
 const Conversation = require("../model/conversationModel");
 const Message = require("../model/messageModel");
 const User = require("../model/userModel");
+const imagekit = require("../config/imageKit");
 const { getIO, getReceiverSocketId } = require("../socket");
 
 /**
@@ -9,11 +10,12 @@ const { getIO, getReceiverSocketId } = require("../socket");
  * saves both, and emits real-time update via socket.io.
  */
 exports.sendMessage = async (req, res) => {
-  const { message } = req.body;       // Message text from request body
-  const { id: receiverId } = req.params; // Receiver user ID from route param
-  const senderId = req.user._id;      // Logged-in user (from verifyAuth middleware)
+  // Extract message details from request
+  const { content, type } = req.body; //for text or link messages
+  const { id: receiverId } = req.params;
+  const senderId = req.user._id;
 
-  // 1. Find or create conversation between sender & receiver
+  // Find existing conversation or create new one
   let conversation = await Conversation.findOne({
     members: { $all: [senderId, receiverId] },
   });
@@ -23,22 +25,43 @@ exports.sendMessage = async (req, res) => {
       members: [senderId, receiverId],
     });
   }
+  // Determine message type and handle file upload if present
+  let messageType = type || "text";
+  let fileUrl = null;
+  let messageContent = content || null;
 
-  // 2. Create a new message
-  const newMessage = new Message({ senderId, receiverId, message });
+  // If file exists → upload to ImageKit
+  if (req.file) {
+    const uploadResponse = await imagekit.upload({
+      file: req.file.buffer,
+      fileName: Date.now() + "-" + req.file.originalname,
+      folder: "chat_uploads",
+    });
+    // Set the file URL in the message and determine the message type based on MIME type
+    fileUrl = uploadResponse.url;
+    const mime = req.file.mimetype;
+    if (mime.startsWith("image")) messageType = "image";
+    else if (mime.startsWith("video")) messageType = "video";
+    else if (mime.startsWith("audio")) messageType = "audio";
+  }
 
-  // 3. Save message and update conversation in parallel
+  const newMessage = new Message({
+    senderId,
+    receiverId,
+    type: messageType,
+    content: messageContent,
+    fileUrl,
+  });
+
   conversation.messages.push(newMessage._id);
   await Promise.all([newMessage.save(), conversation.save()]);
 
-  // 4. Emit new message event if receiver is online
   const io = getIO();
   const receiverSocketId = getReceiverSocketId(receiverId);
   if (receiverSocketId) {
     io.to(receiverSocketId).emit("newMessage", newMessage);
   }
 
-  // 5. Send success response
   res.status(201).json(newMessage);
 };
 
