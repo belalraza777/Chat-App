@@ -92,6 +92,7 @@ const useConversation = create(
 
             // ----─── Send Message ───-----
             sendingMessage: false,
+            // message: { content, file }
             sendMessage: async (message) => {
                 const { selectedConversation, addMessageToUser } = get();
                 if (!selectedConversation?._id) return;

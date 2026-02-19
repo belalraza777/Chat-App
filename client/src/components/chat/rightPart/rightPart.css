@@ -1,3 +1,84 @@
+/* ===== Enhanced Input Bar & File Upload (WhatsApp-like) ===== */
+.input__file {
+  display: none;
+}
+.input__file-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  color: #2563eb;
+  cursor: pointer;
+  font-size: 18px;
+  margin-right: 4px;
+  transition: background 0.2s, color 0.2s;
+}
+.input__file-label:hover {
+  background: #e0e7ff;
+  color: #1d4ed8;
+}
+.input__file-name {
+  font-size: 13px;
+  color: #2563eb;
+  background: #e0e7ff;
+  border-radius: 8px;
+  padding: 2px 10px;
+  margin-right: 6px;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+}
+/* ===== Media Message Styling (WhatsApp-like) ===== */
+.message__media {
+  display: block;
+  max-width: 260px;
+  max-height: 320px;
+  border-radius: 12px;
+  margin: 2px 0 6px 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  object-fit: cover;
+  background: #f1f5f9;
+}
+.message__bubble--me .message__media {
+  border: 2px solid #2563eb;
+}
+.message__bubble--other .message__media {
+  border: 2px solid #e5e7eb;
+}
+
+.message__file, .message__link {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: #f3f4f6;
+  color: #2563eb;
+  font-weight: 500;
+  text-decoration: none;
+  margin: 2px 0 6px 0;
+  word-break: break-all;
+  transition: background 0.2s;
+}
+.message__file:hover, .message__link:hover {
+  background: #e0e7ff;
+  color: #1d4ed8;
+}
+
+.message__bubble audio {
+  width: 220px;
+  margin: 2px 0 6px 0;
+}
+.message__bubble video {
+  max-width: 220px;
+  max-height: 180px;
+  border-radius: 10px;
+  margin: 2px 0 6px 0;
+  background: #000;
+}
 /* ===== Right Panel Layout ===== */
 .right {
   flex: 1 1 auto;

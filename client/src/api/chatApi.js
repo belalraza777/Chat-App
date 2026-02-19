@@ -21,6 +21,19 @@ export function getMessages(userId) {
 }
 
 // Send a message to a specific user
-export function sendMessage(userId, message) {
-  return axiosInstance.post(`/send/${userId}`, { message });
+// Send a message to a specific user (supports text and file)
+// Send a message to a specific user (supports text, image, video, audio, link)
+// message = { content, type, file }
+export function sendMessage(userId, { content, type = "text", file }) {
+  const formData = new FormData();
+  if (content) formData.append("content", content);
+  if (type) formData.append("type", type);
+  if (file) formData.append("file", file);
+  return axios.post(`${API_BASE}/send/${userId}`,
+    formData,
+    {
+      withCredentials: true,
+      headers: { "Content-Type": "multipart/form-data" },
+    }
+  );
 }
